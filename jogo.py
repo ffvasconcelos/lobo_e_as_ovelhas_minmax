@@ -17,37 +17,56 @@ tabuleiro = [
   [0, 0, 0, 0, 0, 0, 0, 0],
 ]
 estado_inicial = [
-  [0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, -1, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
-  [-1, 0, -1, 0, -1, 0, -1, 0],
+  [1, 0, 1, 0, 1, 0, 1, 0],
 ]
 
-def vitoria(estado, jogador):
-  if (jogador == HUMANO):
-    estados_de_vitoria = [
-      estado[7][0], estado[7][1], estado[7][2], estado[7][3], estado[7][4], estado[7][5], estado[7][6], estado[7][7],
-    ]
+pos_inicial_L = [0,3]
+pos_inicial_O = [[7,0],[7,2],[7,4],[7,6]]
 
-    if(HUMANO in estados_de_vitoria): return True
+def vitoria(jogador, posi_lobo, posi_ovelha):
+  if (jogador == HUMANO):
+    if(posi_lobo[0] == 7): return True
     else: return False
 
   if(jogador == COMP):
-    for i in range(estado[0]):
-      for j in range(estado[0]):
-        if(estado[i][j] == HUMANO):
-          if j == 0 & i == 0:
-            if(estado[i+1][j+1] == COMP): return True
-          elif i == 0:
-            if(estado[i+1][j+1] == COMP & estado[i+1][j-1] == COMP): return True
-          elif j == 0:
-            if(estado[i+1][j+1] == COMP & estado[i-1][j+1] == COMP): return True
-          elif j == 7:
-            if(estado[i+1][j-1] == COMP & estado[i-1][j-1] == COMP): return True
-          else:
-            if(estado[i+1][j-1] == COMP & estado[i-1][j-1] == COMP & estado[i+1][j+1] == COMP & estado[i+1][j-1] == COMP): return True
-          return False
+    movs = [[posi_lobo[0] + 1, posi_lobo[1] + 1], [posi_lobo[0] + 1, posi_lobo[1] - 1], [posi_lobo[0] - 1, posi_lobo[1] + 1], [posi_lobo[0] - 1, posi_lobo[1] - 1]]
+
+    for i in movs:
+      if(i[0] < 0 | i[0] > 7 | i[1] < 0 | i[1] > 7):
+        movs.pop(movs.index(i))
+
+    for i in movs:
+      if i not in posi_ovelha: return False
+    
+    return True
+
+def desenha_tabuleiro(estado):
+  for i in range(0,8):
+    print('\n-----------------')
+    print("|", end='')
+    for j in range(0,8):
+      if estado[i][j] == COMP:
+        print("O|", end='')
+      elif estado[i][j] == HUMANO:
+        print("L|", end='')
+      else:
+        print(" |", end='')
+  print('\n-----------------')
+
+def main():
+
+  list1 = [[0,0],[1,1],[2,2]]
+  list2 = [[1,1],[2,2]]
+
+  print(list2 in list1)
+  
+
+if __name__ == '__main__':
+  main()
